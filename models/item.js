@@ -8,6 +8,7 @@ var item = new Schema({
     quality: {type: Number, required: true},
     createdDate: { type: Date, default: Date.now },
     postingId: {type: String, required: true},
+    status:{type: String, required: true, enum: ["available", "timedOut", "sold"], default: "available"}
 });
 
 module.exports = mongoose.model('Items', item);
