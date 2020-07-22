@@ -6,6 +6,7 @@ const port = 3000;
 
 
 const itemRoutes = require('./routes/items');
+const inventoryRoutes = require('./routes/inventory');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -21,11 +22,11 @@ app.use((req,res, next) => {
 
 
 app.use("/api/items", itemRoutes);
-
+app.use("/api/inventory", inventoryRoutes);
 mongoose.connect('mongodb://localhost/ead_inventory');
 
 app.get('/', (req, res) => {
-    res.send("fhsd");
+    res.send("nothing here");
 }); 
 
 
