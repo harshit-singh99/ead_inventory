@@ -1,13 +1,17 @@
 const express = require('express');
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
+const fileUpload = require('express-fileupload');
 const app = express();
 const port = 3000;
+//serveo,net
 
 
 const itemRoutes = require('./routes/items');
 const inventoryRoutes = require('./routes/inventory');
+const qualityRoutes = require('./routes/quality');
 
+app.use(fileUpload());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.text());
@@ -23,6 +27,7 @@ app.use((req,res, next) => {
 
 app.use("/api/items", itemRoutes);
 app.use("/api/inventory", inventoryRoutes);
+app.use("/api/quality", qualityRoutes);
 mongoose.connect('mongodb://localhost/ead_inventory');
 
 app.get('/', (req, res) => {
