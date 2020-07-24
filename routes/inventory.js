@@ -2,7 +2,10 @@ const express = require('express');
 const items = require('../models/inven');
 const router = express.Router();
 
-
+/**
+ * Handles querries on the inventory.
+ * Returns the available items and their details.
+ */
 router.get("/", (req, res) => {
     console.log(req.query);
     items.find(req.query, (err, response) => {
@@ -11,11 +14,16 @@ router.get("/", (req, res) => {
     });
 });
 
-
+/**
+ * Adds items to the inventory
+ */
 router.post("/", (req, res) => {
     itemName = req.body.name;
     items.findOne({name:itemName}, (err, response) => {
         if (err) return res.status(400).send(err);
+        /**
+         * if the items doesn't already exist this block is triggered and item is stored
+         */
         if (response == null){
             let item = new items({
                 name: req.body.name,
@@ -29,6 +37,9 @@ router.post("/", (req, res) => {
                 res.status(200).send(item);
             });
         }
+        /**
+         * If the item does exist then this block is triggered. The quantity is added to the preqxisting Quantity.
+         */
         else{
             let newQty = response.quantity + req.body.quantity;
             let newQul = (response.quality * response .quantity + req.body.quality * req.body.quantity) / (response.quantity + req.body.quantity);
@@ -41,6 +52,11 @@ router.post("/", (req, res) => {
         }
     });
 });
+
+/**
+ * This is used to remove items from the inventory.
+ * This returns the total cost of the items removed.
+ */
 
 router.post("/remove", (req, res) => {
     console.log(req.body);

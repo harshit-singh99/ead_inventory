@@ -2,7 +2,11 @@ const express = require('express');
 const items = require('../models/inven');
 const router = express.Router();
 
-
+/**
+ * Receives a picture of item from delivery module and estimates quality.
+ * Calulates optimal price of those items accoring to market price and estimated quality.
+ * Addes those items to teh inventory.
+ */
 
 router.post("/", (req, res) => {
     console.log(req.body);
@@ -28,11 +32,19 @@ router.post("/", (req, res) => {
                 quality: qual,
                 price: Math.round(100 * Number(req.body.price) * qual / 100) / 100,
             });
+            /**
+             * The price of item is calculated based on its price and the estimated quality.
+             * It is then sent to the seller module which then adds it to the amount payable to seller
+             */
             item.save((err, newItem) => {
                 if (err) return res.status(400).send(err);
                 res.status(200).send({price: response.price * response.quantity});
             });
         }
+        /**
+         * Following block is triggered when that item is already present in teh inventory.
+         * In this case the quality adnd price is determined by the weighted average of the existing item and newly added one.
+         */
         else{
             let newQty = Number(response.quantity) + Number(req.body.quantity);
             let newQul = (response.quality * response .quantity + qual * Number(req.body.quantity) / 100) / newQty;

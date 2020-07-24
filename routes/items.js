@@ -2,7 +2,9 @@ const express = require('express');
 const items = require('../models/item');
 const router = express.Router();
 
-
+/**
+ * Hadles querries on the items recieved from individual postings.
+ */
 router.get("/", (req, res) => {
     console.log(req.query);
     items.find(req.query, (err, response) => {
@@ -10,7 +12,9 @@ router.get("/", (req, res) => {
         res.json(response);
     });
 });
-
+/**
+ * Adds new items that are received from individual postings
+ */
 router.post("/", (req, res) => {
     console.log(req);
     let item = new items({
@@ -26,7 +30,9 @@ router.post("/", (req, res) => {
         res.send(newItem);
     });
 });
-
+/**
+ * Modifies the items on the request of other modules.
+ */
 router.put("/", (req, res) => {
     console.log(req);
     items.findOneAndUpdate({postingId : req.body.postingId},{quality: req.body.quality, quantity: req.body.quantity}, {new: true} ,(err, response) => {

@@ -1,15 +1,24 @@
+/**
+ * Initializing all the required libraries and routes 
+ */
+
+
 const express = require('express');
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const fileUpload = require('express-fileupload');
 const app = express();
-const port = 3000;
+const port = 3005;//port on which the application will run
 //serveo,net
 
 
 const itemRoutes = require('./routes/items');
 const inventoryRoutes = require('./routes/inventory');
 const qualityRoutes = require('./routes/quality');
+
+/**
+ * Initializing the necessary middlewares including the routes initialized above
+ */
 
 app.use(fileUpload());
 app.use(bodyParser.json());
@@ -34,7 +43,9 @@ app.get('/', (req, res) => {
     res.send("nothing here");
 }); 
 
-
+/**
+ * connecting to mongo database
+ */
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
